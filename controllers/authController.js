@@ -60,7 +60,7 @@ const login =async (req,res) => {
       name:loggedUser.name,
       _id:loggedUser._id,
 
-    },process.env.SECRET_KEY);
+    },process.env.SECRET_KEY,{ expiresIn: "1h" });
 
      return res.status(201).json({
         status:201,
