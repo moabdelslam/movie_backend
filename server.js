@@ -1,11 +1,9 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const dotenv = require("dotenv");
+require("dotenv").config();
 
-const router = require("./routes/auth");
-
-dotenv.config();
+const { router } = require("./routes/auth");
 
 const app = express();
 app.use(cors());
@@ -13,12 +11,22 @@ app.use(express.json());
 
 app.use("/api/auth", router);
 
+const DB = process.env.MONGO_URI;
+
 mongoose
-  .connect(process.env.MONGO_URI)
+  .connect(DB)
   .then(() => {
     console.log("Connected to MongoDB");
-    app.listen(process.env.PORT, () => {
-      console.log(`Server running on port ${process.env.PORT}`);
-    });
   })
-  .catch((err) => console.log(err));
+  .catch(() => {
+    console.log("DB disconnected");
+  });
+
+app.use((req, res) => {
+  return res.status(500).json({
+    status: 500,
+    data: { data: null, message: "invalid routes" },
+  });
+});
+
+module.exports = app;
