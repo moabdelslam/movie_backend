@@ -18,13 +18,13 @@ mongoose
   .then(() => {
     console.log("Connected to MongoDB");
   })
-  .catch((err) => {
-    console.error("MongoDB connection failed:", err.message);
+  .catch(() => {
+    console.log("MongoDB connection failed");
   });
 
 app.use((req, res) => {
-  return res.status(404).json({
-    status: 404,
+  return res.status(500).json({
+    status: 500,
     data: { data: null, message: "Invalid route" },
   });
 });
